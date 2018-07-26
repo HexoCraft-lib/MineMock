@@ -27,7 +27,7 @@ public class JavaPluginUtils {
     // Do not instantiate
     // Use static method instead.
     private JavaPluginUtils() {
-        throw new IllegalAccessError();
+        throw new IllegalAccessError("This is a private constructor");
     }
 
 

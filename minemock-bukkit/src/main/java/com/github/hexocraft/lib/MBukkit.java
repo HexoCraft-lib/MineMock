@@ -32,7 +32,7 @@ public class MBukkit {
     // Do not instantiate
     // Use static method instead.
     private MBukkit() {
-        throw new IllegalAccessError();
+        throw new IllegalAccessError("This is a private constructor");
     }
 
     //

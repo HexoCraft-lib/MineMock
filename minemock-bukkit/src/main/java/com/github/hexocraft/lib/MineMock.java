@@ -35,7 +35,7 @@ public class MineMock {
     // Do not instantiate
     // Use static method instead.
     private MineMock() {
-        throw new IllegalAccessError();
+        throw new IllegalAccessError("This is a private constructor");
     }
 
 
@@ -148,8 +148,8 @@ public class MineMock {
     public static MPlugin createFakePlugin(String pluginName, String pluginVersion, String mainClass) {
         return createFakePlugin(
             new PluginDescriptionFile(pluginName, pluginVersion, mainClass)
-            , new File("./target/test/" + pluginName.replace(" ", "_"))
-            , new File("./target/test/" + pluginName.replace(" ", "_²²") + ".jar"));
+            , new File("plugins/" + pluginName.replace(" ", "_"))
+            , new File("plugins/" + pluginName.replace(" ", "_") + ".jar"));
     }
 
     /**
