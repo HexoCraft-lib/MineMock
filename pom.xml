@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Parent -->
+    <parent>
+        <groupId>com.github.hexocraft-lib</groupId>
+        <artifactId>hexocraftlib</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+        <relativePath>../HexoCraftLib</relativePath>
+    </parent>
+
+    <!-- Artifact properties -->
+    <artifactId>minemock-parent</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <!-- Modules -->
+    <modules>
+    	<module>minemock-bukkit</module>
+    </modules>
+
+    <!-- Info -->
+    <name>${project.artifactId}</name>
+    <description></description>
+    <url>https://github.com/HexoCraft-lib/MineMock</url>
+
+    <!-- Source control -->
+    <scm>
+        <connection>scm:git:git://github.com/HexoCraft-lib/MineMock.git</connection>
+        <developerConnection>scm:git:git@github.com:HexoCraft-lib/MineMock.git</developerConnection>
+        <url>http://github.com/HexoCraft-lib/MineMock</url>
+    </scm>
+
+    <!-- Issue management -->
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/HexoCraft-lib/MineMock/issues</url>
+    </issueManagement>
+
+    <!-- Jenkins server -->
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>http://jenkins.hexocube.fr/job/HexoCraft-lib/job/MineMock</url>
+    </ciManagement>
+
+    <!-- HexoCraft artifactory repository should have all needed artifacts to build the libs -->
+    <repositories>
+        <repository>
+            <id>hexocraft-repo</id>
+            <url>http://repo.hexocube.fr/artifactory/public</url>
+        </repository>
+    </repositories>
+
+    <!-- Dependencies -->
+    <dependencies>
+        <!-- JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    
+</project>
