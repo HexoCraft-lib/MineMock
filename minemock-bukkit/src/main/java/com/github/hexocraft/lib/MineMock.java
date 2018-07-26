@@ -18,15 +18,26 @@ package com.github.hexocraft.lib;
 
  */
 
+import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.logging.Level;
+
 
 public class MineMock {
 
     // Server instance
     private static MServer server = null;
+
+
+    // Do not instantiate
+    // Use static method instead.
+    private MineMock() {
+        throw new IllegalAccessError();
+    }
+
 
     /**
      * Start the server
@@ -36,7 +47,7 @@ public class MineMock {
     public static MServer start() {
 
         // Do not call start if the server already exist
-        if(server != null) {
+        if (server != null) {
             throw new IllegalStateException("MServer instance already exist");
         }
 
@@ -53,7 +64,7 @@ public class MineMock {
     public static void stop() {
 
         // Disable all plugins while shutting down
-        if(isRunning() && server.getPluginManager() != null) {
+        if (isRunning() && server.getPluginManager() != null) {
             server.getPluginManager().clearPlugins();
         }
 
@@ -67,7 +78,7 @@ public class MineMock {
      * @return {@link MServer} instance
      */
     public static MServer restart() {
-        if(isRunning())
+        if (isRunning())
             stop();
         return start();
     }
@@ -93,18 +104,24 @@ public class MineMock {
      * @param dataFolder The folder which contains plugin data's files
      * @param file The file which contains this plugin
      *
-     * @return {@link MPlugin}
+     * @return {@link MPlugin} or null
      */
     public static MPlugin createFakePlugin(PluginDescriptionFile description, File dataFolder, File file) {
+        try {
+            if (isRunning()) {
+                MServer server = MineMock.getServer();
+                JavaPlugin plugin = null;
 
-        if(isRunning()) {
-            MServer server = MineMock.getServer();
-            JavaPlugin plugin = server.getPluginManager().loadPlugin(MPlugin.class, description, dataFolder, file);
-            server.getPluginManager().enablePlugin(plugin);
-            return (MPlugin) plugin;
+                plugin = server.getPluginManager().loadPlugin(MPlugin.class, description, dataFolder, file);
+                server.getPluginManager().enablePlugin(plugin);
+                return (MPlugin) plugin;
+            } else {
+                throw new IllegalStateException("Not mocking");
+            }
         }
-        else {
-            throw new IllegalStateException("Not mocking");
+        catch (InvalidPluginException e) {
+            MineMock.getServer().getLogger().log(Level.SEVERE, e.getMessage());
+            return null;
         }
     }
 
@@ -130,7 +147,7 @@ public class MineMock {
      */
     public static MPlugin createFakePlugin(String pluginName, String pluginVersion, String mainClass) {
         return createFakePlugin(
-            new PluginDescriptionFile(pluginName, pluginVersion, "")
+            new PluginDescriptionFile(pluginName, pluginVersion, mainClass)
             , new File("./target/test/" + pluginName.replace(" ", "_"))
             , new File("./target/test/" + pluginName.replace(" ", "_²²") + ".jar"));
     }

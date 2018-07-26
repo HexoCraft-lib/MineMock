@@ -24,6 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
 import java.lang.reflect.Field;
+import java.util.logging.Level;
 
 
 public class MBukkit {
@@ -52,7 +53,7 @@ public class MBukkit {
             server.set(null, null);
         }
         catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
+            MineMock.getServer().getLogger().log(Level.SEVERE, e.getMessage());
         }
         return (MServer) Bukkit.getServer();
     }

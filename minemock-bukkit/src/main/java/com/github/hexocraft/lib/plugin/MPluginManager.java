@@ -41,13 +41,14 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
 
+
 public class MPluginManager implements PluginManager {
 
-    private final Server              server;
-    private final List<Plugin>        plugins                        = new ArrayList();
-    private final Map<String, Plugin> lookupNames                    = new HashMap();
-    private final List<Class<?>>      defaultPluginConstructorParams = Arrays.asList(JavaPluginLoader.class, PluginDescriptionFile.class, File.class, File.class);
-    private       boolean             useTimings                     = false;
+    private final Server server;
+    private final List<Plugin> plugins = new ArrayList();
+    private final Map<String, Plugin> lookupNames = new HashMap();
+    private final List<Class<?>> defaultPluginConstructorParams = Arrays.asList(JavaPluginLoader.class, PluginDescriptionFile.class, File.class, File.class);
+    private boolean useTimings = false;
 
 
     public MPluginManager(Server instance) {
@@ -58,15 +59,21 @@ public class MPluginManager implements PluginManager {
     // Load plugin
     // -------------------------------------------------------------------------
 
+
     /**
      * Load plugin from class
      *
      * @param clazz The plugin to load.
      * @param description The {@link PluginDescriptionFile} which contains information about the plugin
+     * @param dataFolder The folder which contains plugin data's files
+     * @param file The file which contains this plugin
      *
      * @return The loaded plugin.
+     *
+     * @throws InvalidPluginException If pluigin constructor cannot be instantiated
      */
-    public JavaPlugin loadPlugin(Class<? extends JavaPlugin> clazz, PluginDescriptionFile description, File dataFolder, File file) {
+    @SuppressWarnings("deprecation")
+    public JavaPlugin loadPlugin(Class<? extends JavaPlugin> clazz, PluginDescriptionFile description, File dataFolder, File file) throws InvalidPluginException {
         try {
 
             // Get plugin constructor
@@ -79,8 +86,7 @@ public class MPluginManager implements PluginManager {
             // Intance the new plugin
             JavaPlugin plugin = constructor.newInstance(arguments);
 
-            // todo
-            //addCommandsFrom(plugin);
+            //todo: addCommandsFrom(plugin)
             plugins.add(plugin);
             lookupNames.put(plugin.getDescription().getName(), plugin);
             plugin.onLoad();
@@ -88,7 +94,7 @@ public class MPluginManager implements PluginManager {
 
         }
         catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            throw new RuntimeException("Failed to instantiate plugin", e);
+            throw new InvalidPluginException("Failed to instantiate plugin", e);
         }
     }
 
@@ -98,7 +104,7 @@ public class MPluginManager implements PluginManager {
 
     @Override
     public synchronized Plugin getPlugin(String name) {
-        return (Plugin) this.lookupNames.get(name.replace(' ', '_'));
+        return this.lookupNames.get(name.replace(' ', '_'));
     }
 
     @Override
@@ -115,18 +121,15 @@ public class MPluginManager implements PluginManager {
     @Override
     public boolean isPluginEnabled(Plugin plugin) {
 
-        Validate.notNull(plugin, "Plugin cannot be null");
-
         return (plugin != null && this.plugins.contains(plugin)) && plugin.isEnabled();
     }
 
     @Override
     public void enablePlugin(Plugin plugin) {
 
-        Validate.notNull(plugin, "Plugin cannot be null");
-
-        if (!(plugin instanceof JavaPlugin))
-            throw new IllegalArgumentException("Not a JavaPlugin");
+        if (!(plugin instanceof JavaPlugin)) {
+            this.server.getLogger().log(Level.SEVERE, "Error occurred while enabling plugin");
+        }
 
         if (plugin.isEnabled())
             return;
@@ -138,7 +141,7 @@ public class MPluginManager implements PluginManager {
 
     @Override
     public void disablePlugins() {
-        this.plugins.forEach(plugin -> disablePlugin(plugin));
+        this.plugins.forEach(this::disablePlugin);
     }
 
     @Override
@@ -164,16 +167,16 @@ public class MPluginManager implements PluginManager {
             this.plugins.clear();
             this.lookupNames.clear();
             HandlerList.unregisterAll();
-            //this.fileAssociations.clear();
-            //this.permissions.clear();
-            //((Set)this.defaultPerms.get(true)).clear();
-            //((Set)this.defaultPerms.get(false)).clear();
+            //todo: this.fileAssociations.clear()
+            //todo: this.permissions.clear()
+            //todo: ((Set)this.defaultPerms.get(true)).clear()
+            //todo: ((Set)this.defaultPerms.get(false)).clear()
         }
     }
 
 
     @Override
-    public void callEvent(Event event) throws IllegalStateException {
+    public void callEvent(Event event) {
 
         Validate.notNull(event, "Event can not be null");
 
@@ -193,21 +196,23 @@ public class MPluginManager implements PluginManager {
 
             try {
                 registration.callEvent(event);
-            } catch (AuthorNagException ex) {
+            }
+            catch (AuthorNagException ex) {
                 Plugin plugin = registration.getPlugin();
 
                 if (plugin.isNaggable()) {
                     plugin.setNaggable(false);
 
-                    server.getLogger().log(Level.SEVERE, String.format(
+                    this.server.getLogger().log(Level.SEVERE, String.format(
                         "Nag author(s): '%s' of '%s' about the following: %s",
                         plugin.getDescription().getAuthors(),
                         plugin.getDescription().getFullName(),
                         ex.getMessage()
                     ));
                 }
-            } catch (Throwable ex) {
-                server.getLogger().log(Level.SEVERE, "Could not pass event " + event.getEventName() + " to " + registration.getPlugin().getDescription().getFullName(), ex);
+            }
+            catch (Exception ex) {
+                this.server.getLogger().log(Level.SEVERE, "Could not pass event " + event.getEventName() + " to " + registration.getPlugin().getDescription().getFullName(), ex);
             }
         }
     }
@@ -258,7 +263,8 @@ public class MPluginManager implements PluginManager {
             Method method = getRegistrationClass(type).getDeclaredMethod("getHandlerList");
             method.setAccessible(true);
             return (HandlerList) method.invoke(null);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new IllegalPluginAccessException(e.toString());
         }
     }
@@ -267,7 +273,8 @@ public class MPluginManager implements PluginManager {
         try {
             clazz.getDeclaredMethod("getHandlerList");
             return clazz;
-        } catch (NoSuchMethodException e) {
+        }
+        catch (NoSuchMethodException e) {
             if (clazz.getSuperclass() != null
                 && !clazz.getSuperclass().equals(Event.class)
                 && Event.class.isAssignableFrom(clazz.getSuperclass())) {
@@ -288,13 +295,12 @@ public class MPluginManager implements PluginManager {
     // -------------------------------------------------------------------------
 
     @Override
-    public void registerInterface(Class<? extends PluginLoader> aClass) throws IllegalArgumentException {
+    public void registerInterface(Class<? extends PluginLoader> aClass) {
         throw new AssumeImplementedException();
     }
 
     @Override
-    public Plugin loadPlugin(File file)
-        throws InvalidPluginException, InvalidDescriptionException, UnknownDependencyException {
+    public Plugin loadPlugin(File file) throws InvalidPluginException, InvalidDescriptionException {
         throw new AssumeImplementedException();
     }
 

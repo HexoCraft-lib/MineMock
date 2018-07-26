@@ -26,7 +26,6 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
@@ -347,7 +346,7 @@ public class MServer implements Server {
     }
 
     @Override
-    public boolean dispatchCommand(CommandSender commandSender, String s) throws CommandException {
+    public boolean dispatchCommand(CommandSender commandSender, String s) {
         throw new AssumeImplementedException();
     }
 
@@ -492,12 +491,12 @@ public class MServer implements Server {
     }
 
     @Override
-    public Inventory createInventory(InventoryHolder inventoryHolder, int i) throws IllegalArgumentException {
+    public Inventory createInventory(InventoryHolder inventoryHolder, int i) {
         throw new AssumeImplementedException();
     }
 
     @Override
-    public Inventory createInventory(InventoryHolder inventoryHolder, int i, String s) throws IllegalArgumentException {
+    public Inventory createInventory(InventoryHolder inventoryHolder, int i, String s) {
         throw new AssumeImplementedException();
     }
 
@@ -557,12 +556,12 @@ public class MServer implements Server {
     }
 
     @Override
-    public CachedServerIcon loadServerIcon(File file) throws IllegalArgumentException, Exception {
+    public CachedServerIcon loadServerIcon(File file) throws Exception {
         throw new AssumeImplementedException();
     }
 
     @Override
-    public CachedServerIcon loadServerIcon(BufferedImage bufferedImage) throws IllegalArgumentException, Exception {
+    public CachedServerIcon loadServerIcon(BufferedImage bufferedImage) throws Exception {
         throw new AssumeImplementedException();
     }
 
@@ -602,6 +601,7 @@ public class MServer implements Server {
     }
 
     @Override
+    @Deprecated
     public UnsafeValues getUnsafe() {
         throw new AssumeImplementedException();
     }

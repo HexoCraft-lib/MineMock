@@ -21,7 +21,6 @@ package examples;
 import com.github.hexocraft.lib.MPlugin;
 import com.github.hexocraft.lib.MineMock;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

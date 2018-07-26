@@ -22,6 +22,15 @@ package org.bukkit.plugin.java;
 
 
 public class JavaPluginUtils {
+
+
+    // Do not instantiate
+    // Use static method instead.
+    private JavaPluginUtils() {
+        throw new IllegalAccessError();
+    }
+
+
     /**
      * Sets the enabled status of a java plugin.
      *

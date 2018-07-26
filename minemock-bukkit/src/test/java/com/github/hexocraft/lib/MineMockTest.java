@@ -19,7 +19,7 @@ package com.github.hexocraft.lib;
  */
 
 import org.bukkit.Bukkit;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
