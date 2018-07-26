@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FakePlugin {
 
-
     @BeforeEach
     void setUp() {
         MineMock.start();
@@ -49,8 +48,8 @@ public class FakePlugin {
         String pluginName = "Fake plugin";
         String pluginVersion = "1.0.0";
         String mainClass = "FakePlugin.class.getName()";
-        File dataFolder = new File(".\\target\\test\\Fake-Plugin");
-        File file= new File(".\\target\\test\\Fake-Plugin\\fake-plugin.jar");
+        File dataFolder = new File("plugins/Fake-Plugin");
+        File file = new File("plugins/fake-plugin.jar");
 
         // Create a fake plugin
         MPlugin plugin = MineMock.createFakePlugin(pluginName, pluginVersion, mainClass, dataFolder, file);
@@ -73,8 +72,8 @@ public class FakePlugin {
         String mainClass = "FakePlugin.class.getName()";
 
         PluginDescriptionFile pdf = new PluginDescriptionFile(pluginName, pluginVersion, mainClass);
-        File dataFolder = new File(".\\target\\test\\Fake-Plugin");
-        File file= new File(".\\target\\test\\Fake-Plugin\\fake-plugin.jar");
+        File dataFolder = new File("plugins/Fake-Plugin");
+        File file = new File("plugins/fake-plugin.jar");
 
         MPlugin plugin = MineMock.createFakePlugin(pdf, dataFolder, file);
 
