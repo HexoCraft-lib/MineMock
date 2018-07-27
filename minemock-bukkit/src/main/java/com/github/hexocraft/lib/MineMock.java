@@ -29,7 +29,7 @@ import java.util.logging.Level;
 public class MineMock {
 
     // Server instance
-    private static MServer server = null;
+    private static volatile MServer server = null;
 
 
     // Do not instantiate
@@ -44,18 +44,19 @@ public class MineMock {
      *
      * @return {@link MServer} instance
      */
-    public static MServer start() {
+    public static synchronized MServer start() {
 
+        if(server == null) {
+            // New server instance
+            server = new MServer();
+
+            // Set server instance
+            return MBukkit.setServer(server);
+        }
         // Do not call start if the server already exist
-        if (server != null) {
+        else {
             throw new IllegalStateException("MServer instance already exist");
         }
-
-        // New server instance
-        server = new MServer();
-
-        // Set server instance
-        return MBukkit.setServer(server);
     }
 
     /**
@@ -148,7 +149,7 @@ public class MineMock {
     public static MPlugin createFakePlugin(String pluginName, String pluginVersion, String mainClass) {
         return createFakePlugin(
             new PluginDescriptionFile(pluginName, pluginVersion, mainClass)
-            , new File("plugins/" + pluginName.replace(" ", "_"))
+            , new File("target/test-run/plugins/" + pluginName.replace(" ", "_"))
             , new File("plugins/" + pluginName.replace(" ", "_") + ".jar"));
     }
 
