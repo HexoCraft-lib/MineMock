@@ -148,7 +148,7 @@ public class MineMock {
     public static MPlugin createFakePlugin(String pluginName, String pluginVersion, String mainClass) {
         return createFakePlugin(
             new PluginDescriptionFile(pluginName, pluginVersion, mainClass)
-            , new File("plugins/" + pluginName.replace(" ", "_"))
+            , new File("target/test-run/plugins/" + pluginName.replace(" ", "_"))
             , new File("plugins/" + pluginName.replace(" ", "_") + ".jar"));
     }
 
