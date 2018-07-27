@@ -22,8 +22,8 @@
     </modules>
 
     <!-- Info -->
-    <name>${project.artifactId}</name>
-    <description></description>
+    <name>MineMock</name>
+    <description>A mocking framework for Bukkit plugins with JUnit5</description>
     <url>https://github.com/HexoCraft-lib/MineMock</url>
 
     <!-- Source control -->
