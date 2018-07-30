@@ -189,6 +189,32 @@ public class MServer implements Server {
         return this.defaultGameMode;
     }
 
+    /**
+     * Gets the name of the update folder. The update folder is used to safely
+     * update plugins at the right moment on a plugin load.
+     * <p>
+     * The update folder name is relative to the plugins folder.
+     *
+     * @return the name of the update folder
+     */
+    @Override
+    public String getUpdateFolder() {
+        return "update";
+    }
+
+    /**
+     * Gets the update folder. The update folder is used to safely update
+     * plugins at the right moment on a plugin load.
+     *
+     * @return the update folder
+     */
+    @Override
+    public File getUpdateFolderFile() {
+        File plugins = new File("plugins");
+        return new File(plugins, getUpdateFolder());
+    }
+
+
     // Not implemented functions
     // -------------------------------------------------------------------------
 
@@ -269,16 +295,6 @@ public class MServer implements Server {
 
     @Override
     public int broadcastMessage(String s) {
-        throw new AssumeImplementedException();
-    }
-
-    @Override
-    public String getUpdateFolder() {
-        throw new AssumeImplementedException();
-    }
-
-    @Override
-    public File getUpdateFolderFile() {
         throw new AssumeImplementedException();
     }
 
