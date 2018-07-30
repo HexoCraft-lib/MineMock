@@ -112,36 +112,78 @@ public class MServer implements Server {
     // Overridden functions from {@link Server}
     // -------------------------------------------------------------------------
 
+    /**
+     * Gets the name of this server implementation.
+     *
+     * @return name of this server implementation
+     */
     @Override
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Gets the version string of this server implementation.
+     *
+     * @return version of this server implementation
+     */
     @Override
     public String getVersion() {
         return this.version;
     }
 
+    /**
+     * Gets the Bukkit version that this server is running.
+     *
+     * @return version of Bukkit
+     */
     @Override
     public String getBukkitVersion() {
         return this.bukkitVersion;
     }
 
+    /**
+     * Checks the current thread against the expected primary thread for the
+     * server.
+     * <p>
+     * <b>Note:</b> this method should not be used to indicate the current
+     * synchronized state of the runtime. A current thread matching the main
+     * thread indicates that it is synchronized, but a mismatch <b>does not
+     * preclude</b> the same assumption.
+     *
+     * @return true if the current thread matches the expected primary thread,
+     *     false otherwise
+     */
     @Override
     public boolean isPrimaryThread() {
         return true;
     }
 
+    /**
+     * Returns the primary logger associated with this server instance.
+     *
+     * @return Logger associated with this server
+     */
     @Override
     public Logger getLogger() {
         return logger;
     }
 
+    /**
+     * Gets the plugin manager for interfacing with plugins.
+     *
+     * @return a plugin manager for this Server instance
+     */
     @Override
     public MPluginManager getPluginManager() {
         return pluginManager;
     }
 
+    /**
+     * Gets the default {@link GameMode} for new players.
+     *
+     * @return the default game mode
+     */
     @Override
     public GameMode getDefaultGameMode() {
         return this.defaultGameMode;
