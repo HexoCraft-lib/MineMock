@@ -22,7 +22,7 @@
     </modules>
 
     <!-- Info -->
-    <name>MineMock</name>
+    <name>MineMock parent pom</name>
     <description>A mocking framework for Bukkit plugins with JUnit5</description>
     <url>https://github.com/HexoCraft-lib/MineMock</url>
 

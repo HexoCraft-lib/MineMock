@@ -17,7 +17,7 @@
     <packaging>jar</packaging>
 
     <!-- Info -->
-    <name>MineMock</name>
+    <name>MineMock for Bukkit</name>
     <description>A mocking framework for Bukkit plugins with JUnit5</description>
     <url>https://github.com/HexoCraft-lib/MineMock</url>
 
